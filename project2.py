@@ -39,14 +39,28 @@ def find_urls(s):
 ## http://www.michigandaily.com/section/opinion
 
 def grab_headlines():
-    pass 
-    #f = open('http://www.michigandaily.com/section/opinion', 'r')
-    #text_data = f.read()
-    #f.close()
-    #soup = BeautifulSoup(text_data, 'html.parser')
-    #print(soup.prettify())
-    #Your code here
+    base_url = 'http://www.michigandaily.com/section/opinion'
+    r = requests.get(base_url)
+    soup = BeautifulSoup(r.text, 'lxml')
+    item_list = soup.find_all(class_='item-list')
+    #print(item_list)
+    for items in item_list:
+        items = soup('ol')
+    #print(items)
+    #for headlines in item
+    for li in items:
+        li = soup.find_all('li')
+        for headlines in li:
+            headlines = headlines.text
+        print(headlines)
 
+    #print(item)   
+    # print(soup.prettify())
+    #for most_read in soup.find(class_='pane-title'): 
+        #if most_read.a: 
+            #print(most_read.a.text.replace("\n", " ").strip())
+        #else:
+            #print(most_read.contents[0].strip())
 
 
 ## PART 3 (a) Define a function called get_umsi_data.  It should create a dictionary
