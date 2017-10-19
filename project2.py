@@ -42,25 +42,29 @@ def grab_headlines():
     base_url = 'http://www.michigandaily.com/section/opinion'
     r = requests.get(base_url)
     soup = BeautifulSoup(r.text, 'lxml')
-    item_list = soup.find_all(class_='item-list')
-    #print(item_list)
-    for items in item_list:
-        items = soup('ol')
-    #print(items)
-    #for headlines in item
-    for li in items:
-        li = soup.find_all('li')
-        for headlines in li:
-            headlines = headlines.text
-        print(headlines)
+    #L = list(soup.children)
+    #print(L)
+    L = []
+    headlines = soup('ol')
+    for headline in headlines:
+        return headline.text.split('\n')
+    #return L
+        #return(headline)
+    #return L
+    #print(headlines)
+    #L = []
+    
+    
+    #for headline in soup.find_all('ol'):
+        #for title in headline.find_all('a'):
+            #print(title.text)
 
-    #print(item)   
-    # print(soup.prettify())
-    #for most_read in soup.find(class_='pane-title'): 
-        #if most_read.a: 
-            #print(most_read.a.text.replace("\n", " ").strip())
-        #else:
-            #print(most_read.contents[0].strip())
+            #L.append(title.text)
+    #return L
+
+    #for headline in soup.find_all(class_='view view-most view-id-most_read view-display-id-pael_pane_1 view-dom-id-99658157999dd0ac5aa62c2b284dd266'):
+        
+        #print(headline)    
 
 
 ## PART 3 (a) Define a function called get_umsi_data.  It should create a dictionary
@@ -75,7 +79,9 @@ def grab_headlines():
 ## requests.get(base_url, headers={'User-Agent': 'SI_CLASS'}) 
 
 def get_umsi_data():
-    pass
+    base_url = 'https://www.si.umich.edu/directory?field_person_firstname_value=&field_person_lastname_value=&rid=All'
+    r = requests.get(base_url)
+    umsi_titles = {}
     #Your code here
 
 ## PART 3 (b) Define a function called num_students.  
