@@ -1,7 +1,7 @@
 ## SI 206 W17 - Project 2
 
 ## COMMENT HERE WITH:
-## Your name:
+## Your name: Jessica Vu
 ## Anyone you worked with on this project:
 
 ## Below we have provided import statements, comments to separate out the 
@@ -27,9 +27,8 @@ from bs4 import BeautifulSoup
 ## find_urls("the internet is awesome #worldwideweb") should return [], empty list
 
 def find_urls(s):
-    url_string = s
-    url = re.findall('^h.+m', url_string)
-    print(url)
+    url = re.findall('http[s]?:\/\/[a-zA-Z.]+\.[a-zA-Z]{2,}', s)
+    return url
     #Your code here
 
 
@@ -40,7 +39,24 @@ def find_urls(s):
 ## http://www.michigandaily.com/section/opinion
 
 def grab_headlines():
-    pass
+    base_url = 'http://www.michigandaily.com/section/opinion'
+    r = requests.get(base_url)
+    soup = BeautifulSoup(r.text, 'lxml')
+    #L = list(soup.children)
+    #print(L)
+    L = []
+    headlines = soup('ol')
+    for headline in headlines:
+        return headline.text.split('\n')
+    #return L
+
+    #L = []
+    #for headline in soup.find_all('ol'):
+        #for title in headline.find_all('a'):
+            #print(title.text)
+
+            #L.append(title.text)
+    #return L
     #Your code here
 
 
@@ -57,14 +73,53 @@ def grab_headlines():
 ## requests.get(base_url, headers={'User-Agent': 'SI_CLASS'}) 
 
 def get_umsi_data():
-    pass
+    
+    page_number = 0
+    people = []
+    job_titles = []
+    while page_number <= 13:
+        if page_number == 0:
+            base_url = 'https://www.si.umich.edu/directory?field_person_firstname_value=&field_person_lastname_value=&rid=All'
+            r = requests.get(base_url, headers={'User-Agent': 'SI_CLASS'})
+            soup = BeautifulSoup(r.text, 'html.parser')
+        else:
+            base_url = 'https://www.si.umich.edu/directory?field_person_firstname_value=&field_person_lastna me_value=&rid=All&page=' + str(page_number)
+            r = requests.get(base_url, headers={'User-Agent': 'SI_CLASS'})
+            soup = BeautifulSoup(r.text, 'html.parser')
+      
+        for name in soup.find_all(class_='field-item even', property='dc:title'):
+            for n in name.find_all('h2'):
+                people.append(n.text)
+        for title in soup.find_all(class_='field field-name-field-person-titles field-type-text field-label-hidden'):
+            for t in title.find_all(class_='field-item even'):
+                job_titles.append(t.text)
+
+        umsi_titles = dict(zip(people, job_titles))
+        page_number += 1
+    return(umsi_titles)
+
+    #for peeps in people:
+        #for jobs in job_titles:
+            #umsi_titles[peeps] = jobs
+
+
+        #return umsi_titles
+
+    #print(job_titles)
+
     #Your code here
 
 ## PART 3 (b) Define a function called num_students.  
 ## INPUT: The dictionary from get_umsi_data().
 ## OUTPUT: Return number of PhD students in the data.  (Don't forget, I may change the input data)
 def num_students(data):
-    pass
+    num_students = 0
+    
+    for k,v in data.items():
+        if v == 'PhD student':
+            num_students += 1
+    return num_students
+
     #Your code here
 
 
